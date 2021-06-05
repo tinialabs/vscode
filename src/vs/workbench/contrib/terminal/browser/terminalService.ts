@@ -428,7 +428,10 @@ export class TerminalService implements ITerminalService {
 		// windows
 		this.terminalInstances.forEach(instance => instance.dispose(!isWindows));
 
-		this._localTerminalService!.setTerminalLayoutInfo(undefined);
+		// below codes are changed by tinia
+		// the _localTerminalService may not exists in tinia
+		this._localTerminalService?.setTerminalLayoutInfo(undefined);
+		// above codes are changed by tinia
 	}
 
 	public getTabLabels(): string[] {

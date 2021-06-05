@@ -23,6 +23,16 @@ export function getWorkspaceIdentifier(workspacePath: URI): IWorkspaceIdentifier
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 export function getSingleFolderWorkspaceIdentifier(folderPath: URI): ISingleFolderWorkspaceIdentifier {
+	// below codes are changed by tinia
+	if (!folderPath.authority) {
+		// Use string `owner+repo:path` to generate id
+		// In this way, the workspaceState will be isolated between from different repo
+		const [owner = 'tinialabs', repo = 'studio'] = URI.parse(window.location.href).path.split('/').filter(Boolean);
+		const id = hash(`${owner}+${repo}:${folderPath.toString()}`).toString(16);
+		return { id, uri: folderPath };
+	}
+	// above codes are changed by tinia
+
 	return {
 		id: getWorkspaceId(folderPath),
 		uri: folderPath

@@ -219,7 +219,7 @@ class BrowserMain extends Disposable {
 			await userDataInitializationService.initializeRequiredResources();
 
 			// Important: Reload only local user configuration after initializing
-			// Reloading complete configuraiton blocks workbench until remote configuration is loaded.
+	        // Reloading complete configuraiton blocks workbench until remote configuration is loaded.
 			await configurationService.reloadLocalUserConfiguration();
 
 			mark('code/didInitRequiredUserData');
@@ -354,5 +354,11 @@ class BrowserMain extends Disposable {
 export function main(domElement: HTMLElement, options: IWorkbenchConstructionOptions): Promise<IWorkbench> {
 	const workbench = new BrowserMain(domElement, options);
 
-	return workbench.open();
+	// below codes are changed by tinia
+	return workbench.open().then(workbench => {
+		// Remove the html load spinner
+		document.querySelector('#load-spinner')?.remove();
+		return workbench;
+	});
+	// above codes are changed by tinia
 }

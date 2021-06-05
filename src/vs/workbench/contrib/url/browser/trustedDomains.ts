@@ -211,13 +211,24 @@ export async function readAuthenticationTrustedDomains(accessor: ServicesAccesso
 		: [];
 }
 
+// below codes are changed by tinia
+const tiniaDefaultTrustedDomains = [
+	'*.github.com',
+	'*.microsoft.com',
+	'*.tinia.org',
+	'*.vercel.com'
+];
+// above codes are changed by tinia
+
 export function readStaticTrustedDomains(accessor: ServicesAccessor): IStaticTrustedDomains {
 	const storageService = accessor.get(IStorageService);
 	const productService = accessor.get(IProductService);
 
+	// below codes are changed by tinia
 	const defaultTrustedDomains: string[] = productService.linkProtectionTrustedDomains
-		? [...productService.linkProtectionTrustedDomains]
-		: [];
+		? [...productService.linkProtectionTrustedDomains, ...tiniaDefaultTrustedDomains]
+		: [...tiniaDefaultTrustedDomains];
+	// above codes are changed by tinia
 
 	let trustedDomains: string[] = [];
 	try {

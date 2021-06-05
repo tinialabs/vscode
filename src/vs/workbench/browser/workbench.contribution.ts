@@ -369,10 +369,9 @@ import { isStandalone } from 'vs/base/browser/browser';
 						return '${activeEditorShort}${separator}${rootName}'; // macOS has native dirty indicator
 					}
 
-					const base = '${dirty}${activeEditorShort}${separator}${rootName}${separator}${appName}';
-					if (isWeb) {
-						return base + '${separator}${remoteName}'; // Web: always show remote name
-					}
+					// below codes are changed by tinia
+					const base = '${dirty}${activeEditorShort}${separator}${owner}/${repo}${separator}${appName}';
+					// above codes are changed by tinia
 
 					return base;
 				})(),

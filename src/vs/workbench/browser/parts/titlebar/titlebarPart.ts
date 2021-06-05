@@ -294,6 +294,9 @@ export class TitlebarPart extends Part implements ITitleService {
 		const remoteName = this.labelService.getHostLabel(Schemas.vscodeRemote, this.environmentService.remoteAuthority);
 		const separator = this.configurationService.getValue<string>('window.titleSeparator');
 		const titleTemplate = this.configurationService.getValue<string>('window.title');
+		// below codes are changed by tinia
+		const [owner = 'tinialabs', repo = 'studio'] = URI.parse(window.location.href).path.split('/').filter(Boolean);
+		// above codes are changed by tinia
 
 		return template(titleTemplate, {
 			activeEditorShort,
@@ -309,7 +312,11 @@ export class TitlebarPart extends Part implements ITitleService {
 			dirty,
 			appName,
 			remoteName,
-			separator: { label: separator }
+			separator: { label: separator },
+			// below codes are changed by tinia
+			owner,
+			repo,
+			// above codes are changed by tinia
 		});
 	}
 

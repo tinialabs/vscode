@@ -21,8 +21,10 @@ if (isWeb || typeof require === 'undefined' || typeof require.__$__nodeRequire !
 	if (Object.keys(product).length === 0) {
 		Object.assign(product, {
 			version: '1.55.0-dev',
-			nameShort: isWeb ? 'Code Web - OSS Dev' : 'Code - OSS Dev',
-			nameLong: isWeb ? 'Code Web - OSS Dev' : 'Code - OSS Dev',
+			// below codes are changed by tinia
+			nameShort: 'Tinia',
+			nameLong: 'Tinia',
+			// below codes are changed by tinia
 			applicationName: 'code-oss',
 			dataFolderName: '.vscode-oss',
 			urlProtocol: 'code-oss',
@@ -36,6 +38,15 @@ if (isWeb || typeof require === 'undefined' || typeof require.__$__nodeRequire !
 				'ms-vscode.remotehub',
 				'ms-vscode.remotehub-insiders'
 			],
+			// below codes are changed by tinia
+			extensionsGallery: {
+				serviceUrl: 'https://marketplace.visualstudio.com/_apis/public/gallery',
+				cacheUrl: 'https://vscode.blob.core.windows.net/gallery/index',
+				itemUrl: 'https://marketplace.visualstudio.com/items',
+				controlUrl: 'https://az764295.vo.msecnd.net/extensions/marketplace.json',
+				recommendationsUrl: 'https://az764295.vo.msecnd.net/extensions/workspaceRecommendations.json.gz',
+			}
+			// below codes are changed by tinia
 		});
 	}
 }

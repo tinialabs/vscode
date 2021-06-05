@@ -18,6 +18,26 @@ import { localize } from 'vs/nls';
 import { Schemas } from 'vs/base/common/network';
 import product from 'vs/platform/product/common/product';
 import { parseLogLevel } from 'vs/platform/log/common/log';
+// below codes are changed by tinia
+// eslint-disable-next-line
+import { getBrowserUrl, replaceBrowserUrl } from 'vs/tinia/util';
+// eslint-disable-next-line
+import { getGitHubAccessToken } from 'vs/tinia/authorizing-github';
+// eslint-disable-next-line
+import { getGitHubAccessTokenWithOverlay, hideAuthorizingOverlay } from 'vs/tinia/authorizing-overlay';
+
+// custom vs code commands defined by tinia
+const getTiniaCustomCommands: () => {
+	id: string;
+	handler: (...args: any[]) => unknown;
+}[] = () => [
+	{ id: 'tinia.vscode.get-browser-url', handler: getBrowserUrl },
+	{ id: 'tinia.vscode.replace-browser-url', handler: replaceBrowserUrl },
+	{ id: 'tinia.vscode.get-github-access-token', handler: getGitHubAccessToken },
+	{ id: 'tinia.vscode.get-github-access-token-with-overlay', handler: getGitHubAccessTokenWithOverlay },
+	{ id: 'tinia.vscode.hide-authorizing-overlay', handler: hideAuthorizingOverlay },
+];
+// above codes are changed by tinia
 
 function doCreateUri(path: string, queryValues: Map<string, string>): URI {
 	let query: string | undefined = undefined;
@@ -378,21 +398,27 @@ class WindowIndicator implements IWindowIndicator {
 				uri = workspace.workspaceUri;
 			}
 
-			if (uri?.scheme === 'github' || uri?.scheme === 'codespace') {
-				[repositoryOwner, repositoryName] = uri.authority.split('+');
+			// below codes are changed by tinia
+			if (uri?.scheme === 'tinia') {
+				[repositoryOwner = 'studio', repositoryName = 'tinia'] = URI.parse(getBrowserUrl()).path.split('/').filter(Boolean);
 			}
+			// above codes are changed by tinia
 		}
 
 		// Repo
 		if (repositoryName && repositoryOwner) {
-			this.label = localize('playgroundLabelRepository', "$(remote) VS Code Web Playground: {0}/{1}", repositoryOwner, repositoryName);
-			this.tooltip = localize('playgroundRepositoryTooltip', "VS Code Web Playground: {0}/{1}", repositoryOwner, repositoryName);
+			// below codes are changed by tinia
+			this.label = localize('playgroundLabelRepository', "$(remote) tinia: {0}/{1}", repositoryOwner, repositoryName);
+			this.tooltip = localize('playgroundRepositoryTooltip', "Tinia Studio: {0}/{1}", repositoryOwner, repositoryName);
+			// above codes are changed by tinia
 		}
 
 		// No Repo
 		else {
-			this.label = localize('playgroundLabel', "$(remote) VS Code Web Playground");
-			this.tooltip = localize('playgroundTooltip', "VS Code Web Playground");
+			// below codes are changed by tinia
+			this.label = localize('playgroundLabel', "$(remote) tinia");
+			this.tooltip = localize('playgroundTooltip', "Tinia Studio");
+			// above codes are changed by tinia
 		}
 	}
 }
@@ -474,11 +500,13 @@ class WindowIndicator implements IWindowIndicator {
 	const workspaceProvider = new WorkspaceProvider(workspace, payload);
 
 	// Home Indicator
+	// below codes are changed by tinia
 	const homeIndicator: IHomeIndicator = {
-		href: 'https://github.com/microsoft/vscode',
+		href: 'https://tinia.org',
 		icon: 'code',
 		title: localize('home', "Home")
 	};
+	// above codes are changed by tinia
 
 	// Window indicator (unless connected to a remote)
 	let windowIndicator: WindowIndicator | undefined = undefined;
@@ -522,6 +550,9 @@ class WindowIndicator implements IWindowIndicator {
 	// Finally create workbench
 	create(document.body, {
 		...config,
+		// below codes are changed by tinia
+		commands: getTiniaCustomCommands(),
+		// above codes are changed by tinia
 		logLevel: logLevel ? parseLogLevel(logLevel) : undefined,
 		settingsSyncOptions,
 		homeIndicator,
