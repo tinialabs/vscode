@@ -409,6 +409,12 @@ interface IWorkbenchConstructionOptions {
 
 	//#endregion
 
+	//# region vscodeweb
+
+	readonly onWorkbenchCreated?: (workbench: IWorkbench) => void
+
+	//#endregion
+
 }
 
 interface IDevelopmentOptions {
@@ -512,6 +518,11 @@ function create(domElement: HTMLElement, options: IWorkbenchConstructionOptions)
 	main(domElement, options).then(workbench => {
 		instantiatedWorkbench = workbench;
 		workbenchPromiseResolve(workbench);
+		// below codes are changed by vscodeweb
+		if (options.onWorkbenchCreated) {
+			options.onWorkbenchCreated(workbench)
+		}
+		// above codes are changed by vscodeweb
 	});
 
 	return toDisposable(() => {

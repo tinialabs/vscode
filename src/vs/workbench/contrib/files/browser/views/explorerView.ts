@@ -242,7 +242,19 @@ export class ExplorerView extends ViewPane {
 		const setHeader = () => {
 			const workspace = this.contextService.getWorkspace();
 			const title = workspace.folders.map(folder => folder.name).join();
-			titleElement.textContent = this.name;
+			// below codes are changed by vscodeweb
+			let repositoryOwner: string | undefined = undefined;
+			let repositoryName: string | undefined = undefined;
+			// set file explorer title with `${route.owner}/${route.repo}`
+			const uri = workspace.folders?.[0].uri;
+			if (uri?.scheme === 'github' || uri?.scheme === 'codespace') {
+				[repositoryOwner, repositoryName] = uri.authority.split('+');
+			}
+			const textContent = repositoryOwner && repositoryName
+				? `${repositoryOwner}/${repositoryName}`
+				: this.name;
+			titleElement.textContent = textContent;
+			// above codes are changed by vscodeweb
 			titleElement.title = title;
 			titleElement.setAttribute('aria-label', nls.localize('explorerSection', "Explorer Section: {0}", this.name));
 		};

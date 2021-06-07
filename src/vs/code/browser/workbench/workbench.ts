@@ -390,14 +390,18 @@ class WindowIndicator implements IWindowIndicator {
 
 		// Repo
 		if (repositoryName && repositoryOwner) {
-			this.label = localize('playgroundLabelRepository', "$(remote) VS Code Web Playground: {0}/{1}", repositoryOwner, repositoryName);
-			this.tooltip = localize('playgroundRepositoryTooltip', "VS Code Web Playground: {0}/{1}", repositoryOwner, repositoryName);
+			// below codes are changed by vscodeweb
+			this.label = localize('playgroundLabelRepository', "$(remote) Project: {0}/{1}", repositoryOwner, repositoryName);
+			this.tooltip = localize('playgroundRepositoryTooltip', "Project: {0}/{1}", repositoryOwner, repositoryName);
+			// above codes are changed by vscodeweb
 		}
 
 		// No Repo
 		else {
-			this.label = localize('playgroundLabel', "$(remote) VS Code Web Playground");
-			this.tooltip = localize('playgroundTooltip', "VS Code Web Playground");
+			// below codes are changed by vscodeweb
+			this.label = localize('playgroundLabel', "$(remote) Project");
+			this.tooltip = localize('playgroundTooltip', "Project");
+			// above codes are changed by vscodeweb
 		}
 	}
 }
@@ -519,6 +523,11 @@ class WindowIndicator implements IWindowIndicator {
 
 	// Finally create workbench
 	create(document.body, {
+		// below codes are changed by vscodeweb
+		onWorkbenchCreated: (workbench) => {
+			configElement.dispatchEvent(new CustomEvent('vscodeweb.workbench.created', { detail: workbench }))
+		},
+		// above codes are changed by vscodeweb
 		...config,
 		developmentOptions: {
 			logLevel: logLevel ? parseLogLevel(logLevel) : undefined,

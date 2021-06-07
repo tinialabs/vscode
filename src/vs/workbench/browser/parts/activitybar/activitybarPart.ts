@@ -993,7 +993,10 @@ export class ActivitybarPart extends Part implements IActivityBarService {
 	}
 
 	private get accountsVisibilityPreference(): boolean {
-		return this.storageService.getBoolean(AccountsActivityActionViewItem.ACCOUNTS_VISIBILITY_PREFERENCE_KEY, StorageScope.GLOBAL, true);
+		// below codes are changed by vscodeweb
+		// hide the account button in menubar
+		return false;
+		// above codes are changed by vscodeweb
 	}
 
 	private set accountsVisibilityPreference(value: boolean) {
